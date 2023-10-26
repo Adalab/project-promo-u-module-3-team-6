@@ -1,9 +1,3 @@
-/*
-font-family: 'Architects Daughter', cursive;
-font-family: 'Comfortaa', sans-serif;
-font-family: 'Kavivanar', cursive;
-*/
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -54,6 +48,7 @@ font-family: 'Kavivanar', cursive;
     }
     @media screen and (min-width: 1024px) {
       font-size: 3rem;
+      padding-inline-end: 50px;
     }
   }
 
@@ -74,6 +69,7 @@ font-family: 'Kavivanar', cursive;
   }
 
   &__btn {
+    text-decoration: none;
     background-color: purple;
     color: aliceblue;
     padding: 8px 12px;
@@ -97,11 +93,11 @@ font-family: 'Kavivanar', cursive;
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
-    gap: 20px;
+    gap: 15px;
     margin: 15px 5px;
   }
   @media screen and (min-width: 1024px) {
-    gap: 50px;
+    gap: 30px;
   }
 }
 .main .title {
@@ -245,10 +241,11 @@ font-family: 'Kavivanar', cursive;
   @media screen and (min-width: 768px) {
     width: 90%;
     padding: 10px 15px;
+    gap: 10px;
   }
   @media screen and (min-width: 1024px) {
     width: 100%;
-    gap: 20px;
+    gap: 40px;
   }
 }
 
@@ -257,8 +254,16 @@ font-family: 'Kavivanar', cursive;
 }
 
 .info-autor .image {
-  height: 10vh;
+  height: 12vh;
   border-radius: 20px;
+  @media screen and (min-width: 768px) {
+    height: 14vh;
+    margin: 10px;
+  }
+  @media screen and (min-width: 768px) {
+    height: 12vh;
+
+  }
 }
 
 .info-autor .job {
@@ -277,6 +282,11 @@ font-family: 'Kavivanar', cursive;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-left: 20px;
+  }
+  @media screen and (min-width: 1024px) {
+    padding-left: 30px;
+
   }
 }
 
@@ -331,8 +341,7 @@ font-family: 'Kavivanar', cursive;
   }
 }
 
-.icon-preview {
-  text-decoration: none;
+.icon-div {
   display: flex;
   justify-content: center;
   margin-top: 5px;
@@ -344,12 +353,12 @@ font-family: 'Kavivanar', cursive;
 
 .icon-preview .fa-globe,
 .fa-github {
+  text-decoration: none;
   color: purple;
-  font-size: 15px;
+  font-size: 18px;
 
   @media screen and (min-width: 768px) {
-    font-size: 20px;
-    gap: 20px;
+    font-size: 22px;
   }
 }
 
@@ -365,6 +374,9 @@ font-family: 'Kavivanar', cursive;
 
 .footer {
   width: 100px;
-  height: 100px;
+  height: 300px;
   margin: auto;
+  &__logo {
+    width: 100px;
+  }
 }

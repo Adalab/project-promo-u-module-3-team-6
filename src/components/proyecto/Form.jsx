@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-no-target-blank */
 import PropTypes from 'prop-types';
+import GetAvatar from './GetAvatar';
 
 const Form = ({
   handleChangeInput,
-  // inputForm,
   handleAuthorInput,
   handleCreateCard,
   data,
@@ -127,10 +127,18 @@ const Form = ({
       </fieldset>
 
       <section className="buttons-img">
-        {/*<Button text="Subir foto de proyecto" className="btn" />
-        <Button text="Subir foto de autora" className="btn" />*/}
-        {/* <button className="btn">Subir foto de proyecto</button>
-        <button className="btn">Subir foto de autora</button> */}
+        <GetAvatar
+          className="btn"
+          avatar={data.image}
+          updateAvatar={(image) => handleChangeInput('image', image)}
+          text="Subir foto de la autora"
+        />
+        <GetAvatar
+          className="btn"
+          avatar={data.photo}
+          updateAvatar={(image) => handleChangeInput('photo', image)}
+          text="Subir foto del proyecto"
+        />
       </section>
       <section className="buttons-img">
         <button className="btn-large" onClick={handleCreateCard}>

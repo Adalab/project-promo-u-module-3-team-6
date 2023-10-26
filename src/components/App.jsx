@@ -1,32 +1,41 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-no-target-blank */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../styles/App.scss';
+// import Landing from '../landing/Landing';
 import Header from './Header';
 import Form from './proyecto/Form';
 import CardPreview from './proyecto/CardPreview';
-import GetAvatar from './proyecto/GetAvatar';
-import Profile from './proyecto/Profile';
 import Footer from './Footer';
 import ls from '../services/localStorage';
+import { Route, Routes } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import { matchPath } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 
 function App() {
   //States
-  const [data, setData] = useState({
-    name: '',
-    slogan: '',
-    repo: '',
-    demo: '',
-    technologies: '',
-    desc: '',
-    autor: '',
-    job: '',
-    image: 'src/images/playa.jpg', // foto proyecto
-    photo: 'src/images/hierbas.webp', // foto autora
+  const [data, setData] = useState(() => {
+    const savedData = ls.get('formData');
+    return savedData
+      ? JSON.parse(savedData)
+      : {
+          name: '',
+          slogan: '',
+          repo: '',
+          demo: '',
+          technologies: '',
+          desc: '',
+          autor: '',
+          job: '',
+          image: 'src/images/hierbas.webp', // foto autora
+          photo: 'src/images/playa.jpg', // foto proyecto
+        };
   });
-  // const [inputForm, setInputForm] = useState('');
 
   //Img Update states
-  const [avatar, setAvatar] = useState(ls.get('userImage', ''));
+  const [avatar, setAvatar] = useState('');
 
   //msg/url states
   const [cardMsg, setCardMsg] = useState('');
@@ -48,9 +57,39 @@ function App() {
   const [authorErrorMsg, setAuthorErrorMsg] = useState('');
   const [jobErrorMsg, setJobErrorMsg] = useState('');
 
+  //Effects
+  useEffect(() => {
+    // Al montar el componente, intentar cargar los datos desde localStorage
+    const savedData = ls.get('formData');
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      setData(parsedData);
+    }
+
+    // También cargar la imagen del usuario desde localStorage
+    const savedUserImage = ls.get('userImage');
+    if (savedUserImage) {
+      setAvatar(savedUserImage);
+    }
+
+    // Establecer el evento de antes de descargar para guardar en localStorage
+    const saveData = () => {
+      const dataString = JSON.stringify(data);
+      ls.set('formData', dataString);
+    };
+    window.addEventListener('beforeunload', saveData);
+
+    // Limpiar el evento al desmontar el componente
+    return () => {
+      window.removeEventListener('beforeunload', saveData);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Handlers
   const handleChangeInput = (id, value) => {
-    // setInputForm(value);
+    let newData = { ...data, [id]: value };
+
     if (id === 'name') {
       setNameErrorMsg(!value ? 'Este campo es requerido' : '');
     } else if (id === 'slogan') {
@@ -83,7 +122,10 @@ function App() {
       }
     }
 
-    setData({ ...data, [id]: value });
+    setData(newData);
+
+    // Guardar en localStorage
+    ls.set('formData', JSON.stringify(newData));
   };
 
   const handleAuthorInput = (event) => {
@@ -115,8 +157,6 @@ function App() {
     })
       .then((response) => response.json())
       .then((pepino) => {
-        console.log(pepino);
-        console.log(data);
         if (pepino.success === false) {
           setCardMsg('Algo ha ido mal');
         } else {
@@ -155,10 +195,32 @@ function App() {
     <>
       <div className="container">
         <Header />
-        <main className="main">
-          <CardPreview data={data} />
-          <GetAvatar avatar={avatar} updateAvatar={updateAvatar} />
-          <Profile avatar={avatar} />
+       
+        <Routes>
+
+        
+        <Route
+        path='/'
+        element={
+          <>
+            <main className="main">
+          <CardPreview data={data} avatar={avatar} />
+          <Link className='header__btn' to='/form'
+        >
+      Ver proyectos
+      </Link>
+        </main>
+          
+          </>
+
+        }
+        
+        />
+        <Route
+        path='/form'
+        element={
+          <>
+          <main className='main'  >
           <Form
             handleChangeInput={handleChangeInput}
             handleAuthorInput={handleAuthorInput}
@@ -174,9 +236,19 @@ function App() {
             jobErrorMsg={jobErrorMsg}
             cardMsg={cardMsg}
             cardURL={cardURL}
-            // inputForm={inputForm}
           />
-        </main>
+          <Link className='header__btn'  to='/' > Volver al inicio </Link>
+          </main>
+          
+          </>
+        }
+        
+        
+        />
+        
+        </Routes>
+
+      
         <Footer />
       </div>
     </>

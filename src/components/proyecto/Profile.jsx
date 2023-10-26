@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import defaultAvatar from '../../images/hierbas.webp';
 import '../../styles/layout/Profile.scss';
