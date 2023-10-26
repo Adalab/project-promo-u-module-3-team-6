@@ -59,23 +59,31 @@ font-family: 'Kavivanar', cursive;
 
   &__text {
     color: #292828;
-    margin: auto 10px 5px 10px;
+    width: 90%;
     text-align: center;
     font-size: 14px;
+    margin-block: 10px;
     @media screen and (min-width: 768px) {
-      margin-bottom: 10px;
-      font-size: 18px;
+      margin-block: 15px;
+      font-size: 20px;
     }
-    @media screen and (min-width: 1024px) {
-      margin-right: 20px;
+    @media screen and (min-width: 1200px) {
+      width:100%;
+      font-size: 24px;
     }
   }
 
   &__btn {
     background-color: purple;
     color: aliceblue;
-    padding: 5px;
+    padding: 8px 12px;
     border-radius: 20px;
+    @media screen and (min-width: 768px) {
+      font-size: 20px;
+    }
+    @media screen and (min-width: 1200px) {
+      font-size: 24px;
+    }
   }
 }
 
@@ -224,16 +232,15 @@ font-family: 'Kavivanar', cursive;
   background-color: #e18fcd;
   color: #292828;
   width: 85%;
-  //height: 60%;
   justify-content: center;
   transform: translateY(-100px);
   border-radius: 20px;
   display: flex;
   flex-direction: row-reverse;
-  //gap: 40px;
-  padding: 5px 15px;
+  gap: 30px;
+  padding: 10px 15px;
   align-items: center;
-  //overflow-y: scroll;
+
 
   @media screen and (min-width: 768px) {
     width: 90%;
@@ -327,7 +334,7 @@ font-family: 'Kavivanar', cursive;
 .icon-preview {
   text-decoration: none;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   margin-top: 5px;
   @media screen and (min-width: 768px) {
     font-size: 20px;
