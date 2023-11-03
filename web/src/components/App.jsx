@@ -9,13 +9,12 @@ import Form from './proyecto/Form';
 import CardPreview from './proyecto/CardPreview';
 import Footer from './Footer';
 import ls from '../services/localStorage';
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { matchPath } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import Projects from './Projects';
+import Proyects from './Proyects';
 import GetAvatar from './proyecto/GetAvatar';
-
 
 function App() {
   //States
@@ -24,20 +23,20 @@ function App() {
     return savedData
       ? JSON.parse(savedData)
       : {
-        name: '',
-        slogan: '',
-        repo: '',
-        demo: '',
-        technologies: '',
-        desc: '',
-        autor: '',
-        job: '',
-        image: 'src/images/user.jpeg', 
-        // foto autora
-        photo: 'src/images/2.jpg', 
-        // photo: 'src/images/playa.jpg', 
-        // foto proyecto
-      };
+          name: '',
+          slogan: '',
+          repo: '',
+          demo: '',
+          technologies: '',
+          desc: '',
+          autor: '',
+          job: '',
+          image: 'src/images/user.jpeg',
+          // foto autora
+          photo: 'src/images/2.jpg',
+          // photo: 'src/images/playa.jpg',
+          // foto proyecto
+        };
   });
 
   //Img Update states
@@ -187,48 +186,33 @@ function App() {
   return (
     <>
       <div className="container">
-        
-
         <Routes>
           <Route
-            path='/'
+            path="/"
             element={
               <>
                 <Landing />
-
               </>
-
             }
-
           />
           <Route
-            path='/projects'
-            element={
-              <>
-              <Header />
-                <Proyects 
-
-                />
-                
-                <Footer />
-
-              </>
-
-            }
-
-
-
-          />
-          <Route
-            path='/form'
+            path="/projects"
             element={
               <>
                 <Header />
-                <main className='main'  >
-                  <CardPreview
-                    data={data}
-                    avatar={avatar}
-                  />
+                <Proyects />
+
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/form"
+            element={
+              <>
+                <Header />
+                <main className="main">
+                  <CardPreview data={data} avatar={avatar} />
                   <Form
                     handleChangeInput={handleChangeInput}
                     handleAuthorInput={handleAuthorInput}
@@ -245,20 +229,17 @@ function App() {
                     cardMsg={cardMsg}
                     cardURL={cardURL}
                   />
-                  <Link className='header__btn' to='/' > Volver al inicio </Link>
+                  <Link className="header__btn" to="/">
+                    {' '}
+                    Volver al inicio{' '}
+                  </Link>
                 </main>
-                
+
                 <Footer />
               </>
             }
-
-
           />
-
         </Routes>
-
-
-
       </div>
     </>
   );
