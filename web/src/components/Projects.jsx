@@ -9,7 +9,6 @@ const projects = () => {
   useEffect(() => {
     const fetchData = async () => {
       const data = await api.getDataProjects();
-      console.log(data);
       setListProject(data.projects);
     };
     fetchData();

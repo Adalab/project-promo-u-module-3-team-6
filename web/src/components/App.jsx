@@ -17,7 +17,6 @@ import Projects from './Projects';
 import GetAvatar from './proyecto/GetAvatar';
 
 function App() {
-  console.log('adasdasda');
   //States
   const [data, setData] = useState(() => {
     const savedData = ls.get('formData');
@@ -225,7 +224,8 @@ function App() {
       image: 'src/images/user.jpeg',
       photo: 'src/images/2.jpg',
     });
-    ls.remove('formData');
+    // ls.remove('formData');
+    ls.clear();
   };
 
   return (

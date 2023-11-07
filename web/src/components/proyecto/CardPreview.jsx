@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Card from '../Card';
 
 const CardPreview = ({ data }) => {
-  console.log('data >> ', data);
   return (
     <section className="preview">
       <img
