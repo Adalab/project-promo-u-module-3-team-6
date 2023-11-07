@@ -7,16 +7,15 @@ server.use(cors());
 server.use(express.json({ limit: '25mb' }));
 server.set('view engine', 'ejs');
 
-async function getConnection() {
-  const connection = await mysql.createConnection({
-    host: 'sql.freedb.tech',
-    database: 'freedb_proyectos_molones',
-    user: 'freedb_hierbas',
-    password: 'eD8qhz*taP#Ja%w',
-  });
-  connection.connect();
-  return connection;
-}
+const pool = mysql.createPool({
+  host: 'sql.freedb.tech',
+  database: 'freedb_proyectos_molones',
+  user: 'freedb_hierbas',
+  password: 'eD8qhz*taP#Ja%w',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
 
 const port = 2002;
 server.listen(port, () => {
@@ -24,56 +23,68 @@ server.listen(port, () => {
 });
 
 server.get('/project', async (req, res) => {
-  const sql =
-    'SELECT user.name AS autor, user.image_user AS image , project.name_project AS name, project.slogan, project.repo, project.demo, project.tech, project.desc FROM user INNER JOIN project ON user.iduser = project.fk_user';
+  try {
+    const sql =
+      'SELECT user.name AS autor, user.image_user AS image , project.name_project AS name, project.slogan, project.repo, project.demo, project.tech, project.desc FROM user INNER JOIN project ON user.iduser = project.fk_user';
 
-  const connection = await getConnection();
-  const [results] = await connection.query(sql);
-  connection.end();
-  res.json({
-    success: true,
-    projects: results,
-  });
+    const [results] = await pool.query(sql);
+    res.json({
+      success: true,
+      projects: results,
+    });
+  } catch (error) {
+    console.error('Error al obtener proyectos:', error);
+    res
+      .status(500)
+      .json({ success: false, error: 'Error al obtener proyectos.' });
+  }
 });
 
 server.post('/createproject', async (req, res) => {
   const body = req.body;
-  // Queries
-  let addAutor = `INSERT INTO user (name, job, image_user) VALUES (?, ?, ?)`;
-  let addProject = `INSERT INTO project (name_project, slogan, repo, demo, tech, \`desc\`, image_project, fk_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-  // Conexión
-  const connection = await getConnection();
-  // Ejecutar query
-  const [resultAutor] = await connection.query(addAutor, [
-    body.autor,
-    body.job,
-    body.image_user,
-  ]);
 
-  if (resultUser.insertId) {
-    const [resultProject] = await connection.query(addProject, [
-      body.name_project,
+  try {
+    const connection = await pool.getConnection();
+
+    const insertUser =
+      'INSERT INTO user (name, job, image_user) VALUES (?, ?, ?);';
+
+    console.log('body.name > ', body.name);
+    console.log('body.job > ', body.job);
+    console.log('body.image_user > ', body.image_user);
+
+    const [resultUser] = await connection.query(insertUser, [
+      body.name,
+      body.job,
+      body.image,
+    ]);
+
+    const idNewUser = resultUser.insertId;
+
+    const insertProject =
+      'INSERT INTO project (name_project, slogan, repo, demo, tech, `desc`, image_project, fk_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?);';
+
+    const [resultProject] = await connection.query(insertProject, [
+      body.name,
       body.slogan,
       body.repo,
       body.demo,
-      body.tech,
+      body.technologies,
       body.desc,
-      body.image_project,
-      resultAutor.insertId,
+      body.photo,
+      idNewUser,
     ]);
 
-    const insertId = resultAutor.insertId;
+    connection.release();
+
     res.json({
       success: true,
-      cardURL: `http://localhost:2002/project/${resultAutor.insertId}`,
+      cardURL: 'http://localhost:2002/project/' + resultProject.insertId,
     });
-  } else {
-    res.json({
-      success: false,
-      message: 'Error al insertar en la tabla user.',
-    });
+  } catch (error) {
+    console.error('Error al crear proyecto:', error);
+    res.status(500).json({ success: false, error: 'Error al crear proyecto.' });
   }
-  connection.end();
 });
 
 server.get('/project/:idproject', async (req, res) => {
