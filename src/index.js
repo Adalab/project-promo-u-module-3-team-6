@@ -66,7 +66,7 @@ server.post('/createproject', async (req, res) => {
       idNewUser,
     ]);
 
-    connection.release();
+    connection.end();
 
     res.json({
       success: true,
